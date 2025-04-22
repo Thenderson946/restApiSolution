@@ -1,14 +1,19 @@
-const { createUser, deleteUser, getUser, getUsers, editUser } = require('../routes/apis/restApis');
-const User = require('../models/user');
+const {
+  createUser,
+  deleteUser,
+  getUser,
+  getUsers,
+  editUser,
+} = require("../routes/apis/restApis");
+const User = require("../models/user");
 const express = require("express");
 const router = express.Router();
+const uploader = require("../middleware/uploader"); // Make sure this exists if needed
 
-const JSON_TYPE = { Content_type: "application/json" };
-
-// Allows all access control 
+// Middleware: Allow all access control
 router.use((req, res, next) => {
   res.set({
-    "Content-type": "application/json",
+    "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
     "Access-Control-Allow-Headers":
@@ -17,28 +22,28 @@ router.use((req, res, next) => {
   next();
 });
 
-// listings all
+// GET all users
 router.get("/", async (req, res) => {
   try {
     const result = await getUsers();
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error });
   }
 });
 
-// listing user
+// GET user by ID
 router.get("/:userid", async (req, res) => {
   try {
-    const result = await getUser(req.params.id);
-    res.status(201).json(result);
+    const result = await getUser(req.params.userid);
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error });
   }
 });
 
-// Creates user
-router.post("/", uploader.single("image"), async (req, res, next) => {
+// POST: Create user
+router.post("/", uploader.single("image"), async (req, res) => {
   const { name, email, gender, status } = req.body;
   const user = new User(name, email, gender, status);
 
@@ -50,25 +55,24 @@ router.post("/", uploader.single("image"), async (req, res, next) => {
   }
 });
 
-/**
- * Updates listing in db and navigates back to user paged
- */
-router.put("/:id", async (req, res, next) => {
+// PUT: Update user
+router.put("/:userid", async (req, res) => {
   const { name, email, gender, status } = req.body;
-  const updatedUser = new User(name, email, gender, status);
+  const updatedUser = { name, email, gender, status };
 
   try {
-    const result = await editUser(user);
-    res.status(201).json(result);
+    const result = await editUser(req.params.userid, updatedUser);
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error });
   }
 });
 
-router.delete("/:id",async (req, res, next) => {
+// DELETE: Remove user
+router.delete("/:userid", async (req, res) => {
   try {
-    const result = await deleteUser(user);
-    res.status(201).json(result);
+    const result = await deleteUser(req.params.userid);
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error });
   }

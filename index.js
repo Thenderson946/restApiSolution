@@ -1,7 +1,6 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { handleCreateUser } = require('./controllers/userController');
-
+const express = require("express");
+const bodyParser = require("body-parser");
+const controller = require("./controllers/userController");
 
 /**
  * In this exercise, you are given a basic web server using connect. The target is goal is
@@ -17,8 +16,8 @@ const PORT = 3000;
 
 app.use(bodyParser.json());
 
-app.post('/api/users', handleCreateUser);
+app.use("/api/users", controller);
 
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

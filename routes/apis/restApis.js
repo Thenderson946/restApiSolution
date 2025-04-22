@@ -4,56 +4,80 @@
  *
  * You can use https://www.postman.com to test what the API should be returning.
  */
-const axios = require('axios');
+const axios = require("axios");
 
-const API_KEY = '923134c939992ae9d88c0674f7ccfb25bf9010d65fc12294b5d95ce6341a7b36';
+const API_KEY = "testkey123";
 
-const API_URL = 'https://gorest.co.in/public/v2/users';
+const API_URL = "https://gorest.co.in/public/v2/users";
 
-async function createUser(user) {  
-    try {
-      const response = await axios.post(API_URL, user, {
-        headers: {
-          Authorization: `Bearer ${process.env.GOREST_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw error.response ? error.response.data : error;
-    }
+async function createUser(user) {
+  try {
+    const response = await axios.post(API_URL, user, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
+  }
 }
 
 async function getUsers() {
   try {
-    // Use Axios to call GET to the /users API, return the data if success
+    const response = await axios.get(API_URL, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
   } catch (error) {
-    // Return an error
+    throw error.response ? error.response.data : error;
   }
 }
 
 async function getUser(user) {
   try {
-    // Use Axios to call GET to the /users API, return the data if success
+    const response = await axios.get(`${API_URL}/${user.id}`, user, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
   } catch (error) {
-    // Return an error
+    throw error.response ? error.response.data : error;
   }
 }
 
 async function editUser(user) {
   try {
-    // Use Axios to call PUT to the /users API, return the posted data if success
+    const response = await axios.put(`${API_URL}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
   } catch (error) {
-    // Return an error
+    throw error.response ? error.response.data : error;
   }
 }
 
 async function deleteUser(user) {
   try {
-    // Use Axios to call DELETE to the /users API, return success
+    const response = await axios.delete(`${API_URL}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
   } catch (error) {
-    // Return an error
+    throw error.response ? error.response.data : error;
   }
 }
 
-module.exports = { createUser, editUser, deleteUser, getUser, getUsers};
+module.exports = { createUser, editUser, deleteUser, getUser, getUsers };
